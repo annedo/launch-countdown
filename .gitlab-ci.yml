@@ -1,0 +1,10 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+  - ci-setup
+
+  script:
+  - lftp -c "set ftp:ssl-allow no; open -u $USERNAME,$PASSWORD $HOST; mirror -Rev dist/ ./public_html  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
