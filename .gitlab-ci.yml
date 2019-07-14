@@ -45,4 +45,4 @@ deploy:
   tags: [local_windows]
 
   script:
-      - duck --upload "$FTP_HOST" $LOCAL_PATH/build/./ --username "$FTP_USERNAME" --password "$FTP_PW" --assumeyes --existing compare --verbose --preserve --quiet;
+      - duck --upload "$FTP_HOST" $LOCAL_PATH/build/./ --username "$FTP_USERNAME" --password "$FTP_PW" --assumeyes --existing compare --preserve --quiet;
