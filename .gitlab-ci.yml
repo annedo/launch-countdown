@@ -1,10 +1,48 @@
+variables:
+  ErrorActionPreference: STOP
+  GIT_DEPTH: "10"
+  FTP_PW: $FTP_PASSWORD
+  
 stages:
+  - build
   - deploy
+
+test_build:
+  stage: build
+  only: [ci-setup]
+  tags: [local_windows]
+
+  script:
+      mkdir "$LOCAL_PATH/build" -Force;
+      Copy-Item _devfiles/css -Destination $LOCAL_PATH/build -Recurse -Force;
+      Copy-Item _devfiles/img -Destination $LOCAL_PATH/build -Recurse -Force;
+      Copy-Item _devfiles/index.html -Destination $LOCAL_PATH/build -Force;
+      Copy-Item _devfiles/timer.js -Destination $LOCAL_PATH/build -Force;
+
+test_deploy:
+  stage: deploy
+  only: [ci-setup]
+  tags: [local_windows]
+
+  script:
+      - duck --upload "$TEST_FTP_HOST" $LOCAL_PATH/build/./ --username "$FTP_USERNAME" --password "$FTP_PW" --assumeyes --existing compare --verbose --preserve --quiet;
+
+build:
+  stage: build
+  only: [master]
+  tags: [local_windows]
+
+  script:
+      mkdir "$LOCAL_PATH/build" -Force;
+      Copy-Item _devfiles/css -Destination $LOCAL_PATH/build -Recurse -Force;
+      Copy-Item _devfiles/img -Destination $LOCAL_PATH/build -Recurse -Force;
+      Copy-Item _devfiles/index.html -Destination $LOCAL_PATH/build -Force;
+      Copy-Item _devfiles/timer.js -Destination $LOCAL_PATH/build -Force;
 
 deploy:
   stage: deploy
-  only:
-  - ci-setup
+  only: [master]
+  tags: [local_windows]
 
   script:
-  - lftp -c "set ftp:ssl-allow no; open -u $USERNAME,$PASSWORD $HOST; mirror -Rev dist/ ./public_html  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
+      - duck --upload "$FTP_HOST" $LOCAL_PATH/build/./ --username "$FTP_USERNAME" --password "$FTP_PW" --assumeyes --existing compare --verbose --preserve --quiet;
