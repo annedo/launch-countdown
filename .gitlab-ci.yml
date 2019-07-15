@@ -29,7 +29,7 @@ test_deploy:
 
 build:
   stage: build
-  only: [master]
+  only: [master, maskbg]
   tags: [local_windows]
 
   script:
@@ -41,7 +41,7 @@ build:
 
 deploy:
   stage: deploy
-  only: [master]
+  only: [master, maskbg]
   tags: [local_windows]
 
   script:
