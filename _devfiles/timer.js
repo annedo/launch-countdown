@@ -43,5 +43,5 @@ function countdown(endDate) {
 }
 
 (function () { 
-  countdown('07/15/2019 12:00:00 AM'); 
+  countdown('07/22/2019 12:00:00 AM'); 
 }());
