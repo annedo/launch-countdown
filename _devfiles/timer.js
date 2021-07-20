@@ -42,6 +42,9 @@ function countdown(endDate) {
   }
 }
 
-(function () { 
-  countdown('07/22/2019 12:00:00 AM'); 
+(function () {
+  // Timer will always be set 250 days in the future for portfolio purposes.
+  let today = new Date();
+  today.setDate(today.getDate() + 250);
+  countdown(today); 
 }());
